@@ -16,25 +16,30 @@ var storage = firebase.storage();
 // DOM Elements
 var fileInput = document.getElementById("fileInput");
 var uploadBtn = document.getElementById("uploadBtn");
-var fileStatus = document.getElementById("fileStatus");
+var preview = document.getElementById("preview");
 
-uploadBtn.onclick = function() {
-    var files = fileInput.files;
-    if (!files.length) {
-        alert("Please select at least one file!");
-        return;
-    }
+var selectedFiles = [];
 
-    fileStatus.innerHTML = ""; // Clear previous status
+// Show thumbnails when files are chosen
+fileInput.addEventListener("change", function() {
+    preview.innerHTML = "";
+    selectedFiles = Array.from(fileInput.files);
 
-    var totalFiles = files.length;
-    var completedFiles = 0;
+    selectedFiles.forEach(function(file) {
+        var card = document.createElement("div");
+        card.className = "file-card";
 
-    Array.from(files).forEach(function(file) {
-        // Create DOM elements for each file
-        var container = document.createElement("div");
-        container.className = "file-container";
-        container.innerHTML = `<strong>${file.name}</strong>`;
+        var img = document.createElement("img");
+        if(file.type.startsWith("image/")) {
+            img.src = URL.createObjectURL(file);
+        } else {
+            img.src = "https://via.placeholder.com/140x140?text=FILE"; // generic placeholder
+        }
+        card.appendChild(img);
+
+        var fileName = document.createElement("div");
+        fileName.innerText = file.name;
+        card.appendChild(fileName);
 
         var progressContainer = document.createElement("div");
         progressContainer.className = "progressContainer";
@@ -44,14 +49,29 @@ uploadBtn.onclick = function() {
         progressBar.innerText = "0%";
 
         progressContainer.appendChild(progressBar);
-        container.appendChild(progressContainer);
-        fileStatus.appendChild(container);
+        card.appendChild(progressContainer);
 
-        progressContainer.style.display = "block";
+        preview.appendChild(card);
+    });
+});
 
-        // Upload file
+// Upload function
+uploadBtn.onclick = function() {
+    if (!selectedFiles.length) {
+        alert("Please select at least one file!");
+        return;
+    }
+
+    var totalFiles = selectedFiles.length;
+    var completedFiles = 0;
+
+    selectedFiles.forEach(function(file, index) {
         var storageRef = storage.ref("uploads/" + file.name);
         var uploadTask = storageRef.put(file);
+
+        var progressBar = preview.children[index].querySelector(".progressBar");
+        var progressContainer = preview.children[index].querySelector(".progressContainer");
+        progressContainer.style.display = "block";
 
         uploadTask.on(
             "state_changed",
@@ -69,9 +89,8 @@ uploadBtn.onclick = function() {
                 uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
                     progressBar.style.width = "100%";
                     progressBar.innerText = "Completed";
-
                     completedFiles++;
-                    // Check if all files are uploaded
+
                     if (completedFiles === totalFiles) {
                         setTimeout(function() {
                             alert("All files uploaded successfully!");
