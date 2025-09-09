@@ -4,16 +4,20 @@
     <meta charset="UTF-8">
     <title>Firebase File Upload</title>
     <style>
-        #progressContainer {
+        .file-container {
+            margin-bottom: 15px;
+        }
+
+        .progressContainer {
             width: 100%;
             background-color: #f3f3f3;
             border-radius: 8px;
-            margin-top: 10px;
             height: 25px;
+            margin-top: 5px;
             display: none;
         }
 
-        #progressBar {
+        .progressBar {
             width: 0%;
             height: 100%;
             background-color: #4CAF50;
@@ -25,16 +29,12 @@
     </style>
 </head>
 <body>
-    <h2>Upload a File to Firebase Storage</h2>
+    <h2>Upload Files to Firebase Storage</h2>
 
-    <input type="file" id="fileInput" />
+    <input type="file" id="fileInput" multiple />
     <button id="uploadBtn">Upload</button>
 
-    <div id="progressContainer">
-        <div id="progressBar">0%</div>
-    </div>
-
-    <p id="status"></p>
+    <div id="fileStatus"></div>
 
     <!-- Firebase Compat Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
