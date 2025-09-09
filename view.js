@@ -13,52 +13,90 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 var storage = firebase.storage();
 
-var fileList = document.getElementById("fileList");
+var gallery = document.getElementById("gallery");
 
-// Function to list all files
+// Function to list all files in gallery
 function listFiles() {
-    fileList.innerHTML = "";
+    gallery.innerHTML = "";
     var listRef = storage.ref("uploads/");
 
     listRef.listAll()
         .then(function(res) {
             if (res.items.length === 0) {
-                fileList.innerHTML = "<tr><td colspan='3'>No files uploaded.</td></tr>";
+                gallery.innerHTML = "<p>No files uploaded.</p>";
             }
 
             res.items.forEach(function(itemRef) {
                 itemRef.getDownloadURL().then(function(url) {
-                    var tr = document.createElement("tr");
+                    // Create image card
+                    var card = document.createElement("div");
+                    card.className = "image-card";
 
-                    tr.innerHTML = `
-                        <td>${itemRef.name}</td>
-                        <td><a href="${url}" target="_blank">Download</a></td>
-                        <td><button onclick="deleteFile('${itemRef.fullPath}', this)">Delete</button></td>
-                    `;
+                    // Image element
+                    var img = document.createElement("img");
+                    img.src = url;
+                    img.alt = itemRef.name;
 
-                    fileList.appendChild(tr);
+                    // Clicking image triggers download
+                    img.onclick = function() {
+                        var a = document.createElement("a");
+                        a.href = url;
+                        a.download = itemRef.name;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    };
+
+                    // Delete button
+                    var delBtn = document.createElement("button");
+                    delBtn.className = "btn-delete";
+                    delBtn.innerText = "Delete";
+                    delBtn.onclick = function() {
+                        if (!confirm("Are you sure you want to delete this file?")) return;
+                        storage.ref(itemRef.fullPath).delete()
+                            .then(function() {
+                                card.remove();
+                            })
+                            .catch(function(err) {
+                                console.error(err);
+                                alert("Failed to delete file: " + err.message);
+                            });
+                    };
+
+                    card.appendChild(img);
+                    card.appendChild(delBtn);
+
+                    gallery.appendChild(card);
                 });
             });
         })
         .catch(function(error) {
             console.error(error);
-            fileList.innerHTML = "<tr><td colspan='3'>Failed to load files.</td></tr>";
+            gallery.innerHTML = "<p>Failed to load files.</p>";
         });
 }
 
-// Function to delete a file
-function deleteFile(path, btn) {
-    if (!confirm("Are you sure you want to delete this file?")) return;
+// Delete all files
+function deleteAllFiles() {
+    if (!confirm("Are you sure you want to delete ALL files?")) return;
 
-    storage.ref(path).delete()
-        .then(function() {
-            // Remove the row from the table
-            var row = btn.closest("tr");
-            row.remove();
-        })
-        .catch(function(error) {
-            console.error(error);
-            alert("Failed to delete file: " + error.message);
+    var listRef = storage.ref("uploads/");
+    listRef.listAll()
+        .then(function(res) {
+            var promises = [];
+            res.items.forEach(function(itemRef) {
+                promises.push(storage.ref(itemRef.fullPath).delete());
+            });
+
+            Promise.all(promises)
+                .then(function() {
+                    alert("All files deleted!");
+                    listFiles();
+                })
+                .catch(function(err) {
+                    console.error(err);
+                    alert("Failed to delete some files: " + err.message);
+                });
         });
 }
 

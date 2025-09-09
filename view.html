@@ -7,64 +7,80 @@
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      margin-top: 50px;
+      margin-top: 30px;
     }
 
-    table {
-      width: 80%;
+    #gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      width: 90%;
       margin: auto;
-      border-collapse: collapse;
     }
 
-    th, td {
+    .image-card {
       border: 1px solid #ddd;
-      padding: 12px;
+      border-radius: 8px;
+      padding: 5px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
     }
 
-    th {
-      background-color: #4CAF50;
-      color: white;
+    .image-card:hover {
+      transform: scale(1.05);
     }
 
-    tr:hover {background-color: #f1f1f1;}
-
-    button {
-      padding: 6px 12px;
-      cursor: pointer;
+    .image-card img {
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
       border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-delete, .btn-download {
+      margin-top: 5px;
+      padding: 6px 12px;
       border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .btn-delete {
       background-color: #f44336;
       color: white;
     }
 
-    button:hover {
+    .btn-delete:hover {
       background-color: #d32f2f;
     }
 
-    a {
-      text-decoration: none;
-      color: #2196F3;
+    .btn-download {
+      background-color: #2196F3;
+      color: white;
+      margin-left: 5px;
     }
 
-    a:hover {
-      text-decoration: underline;
+    .btn-download:hover {
+      background-color: #1976D2;
+    }
+
+    #topButtons {
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
   <h2>📂 Uploaded Files</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>File Name</th>
-        <th>Download</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody id="fileList"></tbody>
-  </table>
-  <br>
-  <button onclick="window.location.href='index.html'">⬅ Back</button>
+
+  <div id="topButtons">
+    <button onclick="window.location.href='index.html'">⬅ Back</button>
+    <button onclick="deleteAllFiles()">🗑 Delete All</button>
+  </div>
+
+  <div id="gallery"></div>
 
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
