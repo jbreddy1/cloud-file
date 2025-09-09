@@ -1,0 +1,7 @@
+[
+  {
+    "origin": ["https://dad-upload.web.app"],
+    "method": ["GET", "POST", "PUT", "DELETE", "HEAD"],
+    "maxAgeSeconds": 3600
+  }
+]
