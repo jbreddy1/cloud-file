@@ -8,6 +8,40 @@
       font-family: Arial, sans-serif;
       text-align: center;
       margin-top: 30px;
+      background-color: #f9f9f9;
+    }
+
+    #topButtons {
+      margin-bottom: 20px;
+    }
+
+    .top-btn {
+      padding: 10px 20px;
+      margin: 0 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    .top-btn.back {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .top-btn.back:hover {
+      background-color: #45a049;
+    }
+
+    .top-btn.delete-all {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .top-btn.delete-all:hover {
+      background-color: #d32f2f;
     }
 
     #gallery {
@@ -21,9 +55,10 @@
     .image-card {
       border: 1px solid #ddd;
       border-radius: 8px;
-      padding: 5px;
+      padding: 10px;
       text-align: center;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      background-color: white;
       transition: transform 0.2s;
     }
 
@@ -36,39 +71,36 @@
       height: 140px;
       object-fit: cover;
       border-radius: 5px;
-      cursor: pointer;
+      margin-bottom: 8px;
     }
 
-    .btn-delete, .btn-download {
-      margin-top: 5px;
+    .btn {
+      margin: 5px 5px 0 5px;
       padding: 6px 12px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
       font-size: 14px;
+      font-weight: bold;
+      transition: all 0.2s;
     }
 
-    .btn-delete {
+    .btn.download {
+      background-color: #2196F3;
+      color: white;
+    }
+
+    .btn.download:hover {
+      background-color: #1976D2;
+    }
+
+    .btn.delete {
       background-color: #f44336;
       color: white;
     }
 
-    .btn-delete:hover {
+    .btn.delete:hover {
       background-color: #d32f2f;
-    }
-
-    .btn-download {
-      background-color: #2196F3;
-      color: white;
-      margin-left: 5px;
-    }
-
-    .btn-download:hover {
-      background-color: #1976D2;
-    }
-
-    #topButtons {
-      margin-bottom: 20px;
     }
   </style>
 </head>
@@ -76,8 +108,8 @@
   <h2>📂 Uploaded Files</h2>
 
   <div id="topButtons">
-    <button onclick="window.location.href='index.html'">⬅ Back</button>
-    <button onclick="deleteAllFiles()">🗑 Delete All</button>
+    <button class="top-btn back" onclick="window.location.href='index.html'">⬅ Back</button>
+    <button class="top-btn delete-all" onclick="deleteAllFiles()">🗑 Delete All</button>
   </div>
 
   <div id="gallery"></div>

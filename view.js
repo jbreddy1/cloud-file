@@ -37,8 +37,11 @@ function listFiles() {
                     img.src = url;
                     img.alt = itemRef.name;
 
-                    // Clicking image triggers download
-                    img.onclick = function() {
+                    // Download button
+                    var downloadBtn = document.createElement("button");
+                    downloadBtn.className = "btn download";
+                    downloadBtn.innerText = "Download";
+                    downloadBtn.onclick = function() {
                         var a = document.createElement("a");
                         a.href = url;
                         a.download = itemRef.name;
@@ -49,7 +52,7 @@ function listFiles() {
 
                     // Delete button
                     var delBtn = document.createElement("button");
-                    delBtn.className = "btn-delete";
+                    delBtn.className = "btn delete";
                     delBtn.innerText = "Delete";
                     delBtn.onclick = function() {
                         if (!confirm("Are you sure you want to delete this file?")) return;
@@ -64,6 +67,7 @@ function listFiles() {
                     };
 
                     card.appendChild(img);
+                    card.appendChild(downloadBtn);
                     card.appendChild(delBtn);
 
                     gallery.appendChild(card);
