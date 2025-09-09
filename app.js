@@ -11,8 +11,6 @@ var firebaseConfig = {
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-
-// Get a reference to storage
 var storage = firebase.storage();
 
 // DOM Elements
@@ -29,8 +27,6 @@ uploadBtn.onclick = function() {
     }
 
     var storageRef = storage.ref("uploads/" + file.name);
-
-    // Start upload
     var uploadTask = storageRef.put(file);
 
     status.innerText = "Uploading...";
@@ -38,17 +34,14 @@ uploadBtn.onclick = function() {
     uploadTask.on(
         "state_changed",
         function(snapshot) {
-            // Optional: show progress
             var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             status.innerText = "Upload is " + progress.toFixed(0) + "% done";
         },
         function(error) {
-            // Handle unsuccessful uploads
             console.error(error);
             status.innerText = "Upload failed: " + error.message;
         },
         function() {
-            // Handle successful uploads
             uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
                 status.innerHTML = `Upload successful! <br> <a href="${downloadURL}" target="_blank">Download File</a>`;
             });
