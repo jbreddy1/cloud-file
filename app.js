@@ -33,7 +33,7 @@ fileInput.addEventListener("change", function() {
         if(file.type.startsWith("image/")) {
             img.src = URL.createObjectURL(file);
         } else {
-            img.src = "https://via.placeholder.com/140x140?text=FILE"; // generic placeholder
+            img.src = "https://via.placeholder.com/140x140?text=FILE"; // generic placeholders
         }
         card.appendChild(img);
 
