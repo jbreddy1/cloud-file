@@ -3,7 +3,7 @@ var firebaseConfig = {
   apiKey: "AIzaSyDqtrSFObjzIC-MZ_fGbBK0iVwXpH-hKX8",
   authDomain: "dad-upload.firebaseapp.com",
   projectId: "dad-upload",
-  storageBucket: "dad-upload.firebasestorage.app",
+  storageBucket: "dad-upload.firebasestorage.app", // make sure bucket matches your CORS setup
   messagingSenderId: "617576089214",
   appId: "1:617576089214:web:dd6284ba410fe865cbfa2f",
   measurementId: "G-Z3XVKP235H"
@@ -17,6 +17,8 @@ var storage = firebase.storage();
 var fileInput = document.getElementById("fileInput");
 var uploadBtn = document.getElementById("uploadBtn");
 var status = document.getElementById("status");
+var progressContainer = document.getElementById("progressContainer");
+var progressBar = document.getElementById("progressBar");
 
 // Upload function
 uploadBtn.onclick = function() {
@@ -29,21 +31,35 @@ uploadBtn.onclick = function() {
     var storageRef = storage.ref("uploads/" + file.name);
     var uploadTask = storageRef.put(file);
 
+    // Show progress bar
+    progressContainer.style.display = "block";
+    progressBar.style.width = "0%";
+    progressBar.innerText = "0%";
     status.innerText = "Uploading...";
 
     uploadTask.on(
         "state_changed",
         function(snapshot) {
             var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            status.innerText = "Upload is " + progress.toFixed(0) + "% done";
+            progressBar.style.width = progress.toFixed(0) + "%";
+            progressBar.innerText = progress.toFixed(0) + "%";
         },
         function(error) {
             console.error(error);
             status.innerText = "Upload failed: " + error.message;
+            alert("Upload failed: " + error.message);
         },
         function() {
             uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                status.innerHTML = `Upload successful! <br> <a href="${downloadURL}" target="_blank">Download File</a>`;
+                progressBar.style.width = "100%";
+                progressBar.innerText = "100%";
+                status.innerHTML = `Upload successful!`;
+
+                // Show alert and redirect
+                setTimeout(function() {
+                    alert("Upload successful!");
+                    window.location.href = "index.html";
+                }, 200);
             });
         }
     );
