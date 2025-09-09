@@ -41,13 +41,24 @@ function listFiles() {
                     var downloadBtn = document.createElement("button");
                     downloadBtn.className = "btn download";
                     downloadBtn.innerText = "Download";
-                    downloadBtn.onclick = function() {
-                        var a = document.createElement("a");
-                        a.href = url;
-                        a.download = itemRef.name;
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
+
+                    // Force download using fetch blob
+                    downloadBtn.onclick = async function() {
+                        try {
+                            const response = await fetch(url);
+                            const blob = await response.blob();
+                            const a = document.createElement("a");
+                            const objectUrl = URL.createObjectURL(blob);
+                            a.href = objectUrl;
+                            a.download = itemRef.name;
+                            document.body.appendChild(a);
+                            a.click();
+                            a.remove();
+                            URL.revokeObjectURL(objectUrl);
+                        } catch (err) {
+                            console.error(err);
+                            alert("Download failed: " + err.message);
+                        }
                     };
 
                     // Delete button
