@@ -1,21 +1,13 @@
 // Firebase configuration
-var firebaseConfig = {
-  apiKey: "AIzaSyDqtrSFObjzIC-MZ_fGbBK0iVwXpH-hKX8",
-  authDomain: "dad-upload.firebaseapp.com",
-  projectId: "dad-upload",
-  storageBucket: "dad-upload.firebasestorage.app",
-  messagingSenderId: "617576089214",
-  appId: "1:617576089214:web:dd6284ba410fe865cbfa2f",
-  measurementId: "G-Z3XVKP235H"
-};
 
-// Initialize Firebase
+
+
+
 firebase.initializeApp(firebaseConfig);
 var storage = firebase.storage();
 
 var gallery = document.getElementById("gallery");
 
-// Function to list all files in gallery
 function listFiles() {
     gallery.innerHTML = "";
     var listRef = storage.ref("uploads/");
@@ -28,21 +20,17 @@ function listFiles() {
 
             res.items.forEach(function(itemRef) {
                 itemRef.getDownloadURL().then(function(url) {
-                    // Create image card
                     var card = document.createElement("div");
                     card.className = "image-card";
 
-                    // Image element
                     var img = document.createElement("img");
                     img.src = url;
                     img.alt = itemRef.name;
 
-                    // Download button
                     var downloadBtn = document.createElement("button");
                     downloadBtn.className = "btn download";
                     downloadBtn.innerText = "Download";
 
-                    // Force download using fetch blob
                     downloadBtn.onclick = async function() {
                         try {
                             const response = await fetch(url);
@@ -61,7 +49,6 @@ function listFiles() {
                         }
                     };
 
-                    // Delete button
                     var delBtn = document.createElement("button");
                     delBtn.className = "btn delete";
                     delBtn.innerText = "Delete";
@@ -91,7 +78,6 @@ function listFiles() {
         });
 }
 
-// Delete all files
 function deleteAllFiles() {
     if (!confirm("Are you sure you want to delete ALL files?")) return;
 
@@ -115,5 +101,4 @@ function deleteAllFiles() {
         });
 }
 
-// Initial load
 listFiles();

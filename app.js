@@ -2,18 +2,17 @@
 
 
 
-// Initialize Firebase
+
 firebase.initializeApp(firebaseConfig);
 var storage = firebase.storage();
 
-// DOM Elements
+
 var fileInput = document.getElementById("fileInput");
 var uploadBtn = document.getElementById("uploadBtn");
 var preview = document.getElementById("preview");
 
 var selectedFiles = [];
 
-// Show thumbnails when files are chosen
 fileInput.addEventListener("change", function() {
     preview.innerHTML = "";
     selectedFiles = Array.from(fileInput.files);
@@ -48,7 +47,6 @@ fileInput.addEventListener("change", function() {
     });
 });
 
-// Upload function
 uploadBtn.onclick = function() {
     if (!selectedFiles.length) {
         alert("Please select at least one file!");
