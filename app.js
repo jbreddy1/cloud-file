@@ -1,13 +1,6 @@
 // Firebase configuration
-var firebaseConfig = {
-  apiKey: "AIzaSyDqtrSFObjzIC-MZ_fGbBK0iVwXpH-hKX8",
-  authDomain: "dad-upload.firebaseapp.com",
-  projectId: "dad-upload",
-  storageBucket: "dad-upload.firebasestorage.app",
-  messagingSenderId: "617576089214",
-  appId: "1:617576089214:web:dd6284ba410fe865cbfa2f",
-  measurementId: "G-Z3XVKP235H"
-};
+
+
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
